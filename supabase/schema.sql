@@ -52,3 +52,22 @@ begin
 end $$;
 revoke all on function public.lire_modifs(text, text) from public;
 grant execute on function public.lire_modifs(text, text) to anon, authenticated;
+
+-- 2026-10-19 : journal des ouvertures du plan (nom saisi par le visiteur), lisible seulement par les éditeurs
+create table if not exists public.visites (
+  id bigint generated always as identity primary key, site text not null, nom text not null, appareil text, quand timestamptz not null default now());
+alter table public.visites enable row level security;
+revoke all on public.visites from anon, authenticated;
+grant select on public.visites to authenticated;
+create policy "lecture editeurs" on public.visites for select to authenticated using ((select public.est_editeur()));
+create index if not exists visites_site_quand on public.visites (site, quand desc);
+create or replace function public.enregistrer_visite(p_site text, p_mdp text, p_nom text, p_appareil text)
+returns void language plpgsql security definer set search_path = '' as $$
+begin
+  if not exists (select 1 from public.sites s where s.site = p_site and s.mdp_hash = extensions.crypt(p_mdp, s.mdp_hash)) then
+    raise exception 'mot de passe incorrect' using errcode = '28P01';
+  end if;
+  insert into public.visites(site, nom, appareil) values (p_site, left(trim(p_nom), 80), left(p_appareil, 120));
+end $$;
+revoke all on function public.enregistrer_visite(text, text, text, text) from public;
+grant execute on function public.enregistrer_visite(text, text, text, text) to anon, authenticated;
