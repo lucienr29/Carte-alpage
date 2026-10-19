@@ -51,6 +51,9 @@ a.card:hover { transform: translateY(-2px); box-shadow: 0 2px 4px rgba(0,0,0,.06
 a.card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 .photo { position: relative; aspect-ratio: 2 / 1; display: flex; background: #3b5145; }
 .photo img { width: 50%; height: 100%; object-fit: cover; display: block; }
+.photo { overflow: hidden; }
+.photo .tuiles { position: absolute; left: 0; right: 0; top: 0; margin-top: -22%; display: grid; grid-template-columns: 1fr 1fr; }
+.photo .tuiles img { width: 100%; height: auto; aspect-ratio: 1; }
 .photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,20,15,.55), rgba(10,20,15,0) 55%); }
 .photo .chip { position: absolute; z-index: 1; top: 12px; left: 12px; display: inline-flex; align-items: center; gap: 6px;
   background: rgba(12,26,21,.72); color: #fff; border-radius: 999px; padding: 4px 10px 4px 8px; font-size: .8rem; font-weight: 600; backdrop-filter: blur(4px); }
@@ -120,13 +123,24 @@ footer a { color: inherit; }
         <span class="go" aria-hidden="true">›</span>
       </div>
     </a></li>
-    <li><div class="card soon">
-      <div class="body">
-        <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>
-        <div><strong>Deuxième alpage</strong><span class="d">En attente du plan AutoCAD.</span></div>
-        <span class="tag">Bientôt</span>
+    <li><a class="card" href="duez/">
+      <div class="photo"><div class="tuiles"><img src="https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage/default/current/3857/14/8528/5807.jpeg" alt="" loading="lazy" onerror="this.style.visibility='hidden'"><img src="https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage/default/current/3857/14/8529/5807.jpeg" alt="" loading="lazy" onerror="this.style.visibility='hidden'"><img src="https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage/default/current/3857/14/8528/5808.jpeg" alt="" loading="lazy" onerror="this.style.visibility='hidden'"><img src="https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage/default/current/3857/14/8529/5808.jpeg" alt="" loading="lazy" onerror="this.style.visibility='hidden'"></div>
+        <span class="chip"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Protégé</span>
+        <span class="lieu">Valais</span>
       </div>
-    </div></li>
+      <div class="body">
+        <div>
+          <strong>Alpage de Duez</strong>
+          <span class="d">Réseau d'eau complet, modifiable en direct.</span>
+          <div class="legend">
+            <span><svg width="18" height="6" aria-hidden="true"><rect width="18" height="6" rx="3" fill="#1d4ed8"/></svg>3,1 km de conduites</span>
+            <span><svg width="14" height="10" viewBox="0 0 14 10" aria-hidden="true"><path d="M1 1l12 8V1L1 9z" fill="#64748b"/></svg>6 vannes</span>
+            <span><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="5" fill="none" stroke="#1d4ed8" stroke-width="2"/></svg>5 purges</span>
+          </div>
+        </div>
+        <span class="go" aria-hidden="true">›</span>
+      </div>
+    </a></li>
   </ul>
   <footer>Fond de carte © <a href="https://www.swisstopo.admin.ch/">swisstopo</a></footer>
 </main>
