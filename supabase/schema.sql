@@ -71,3 +71,16 @@ begin
 end $$;
 revoke all on function public.enregistrer_visite(text, text, text, text) from public;
 grant execute on function public.enregistrer_visite(text, text, text, text) to anon, authenticated;
+
+-- 2026-10-19 : propositions de modification, validées par un éditeur (Lucien) avant d'entrer dans modifs
+create table if not exists public.propositions (
+  id bigint generated always as identity primary key, site text not null, cle text not null,
+  props jsonb not null default '{}'::jsonb, geom jsonb, supprimer boolean not null default false,
+  par text not null, maj timestamptz not null default now());
+alter table public.propositions enable row level security;
+revoke all on public.propositions from anon;
+grant select, insert, delete on public.propositions to authenticated;
+create policy "proposer" on public.propositions for insert to authenticated with check (lower(par) = lower(auth.jwt() ->> 'email'));
+create policy "lire" on public.propositions for select to authenticated using ((select public.est_editeur()) or lower(par) = lower(auth.jwt() ->> 'email'));
+create policy "decider" on public.propositions for delete to authenticated using ((select public.est_editeur()));
+create index if not exists propositions_site on public.propositions (site, maj);
